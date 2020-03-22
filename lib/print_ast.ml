@@ -1,8 +1,5 @@
 open Ast
 
-let array_concat delim arr =
-  Array.fold_left (fun acc s -> acc ^ delim ^ s) "" arr
-
 let rec print_expr = function
   | Number n ->
       string_of_float n
@@ -11,11 +8,12 @@ let rec print_expr = function
   | Binary (c, el, er) ->
       Printf.sprintf "(%c %s %s)" c (print_expr el) (print_expr er)
   | Call (s, es) ->
-      Printf.sprintf "(%s %s)" s (array_concat "" (Array.map print_expr es))
+      Printf.sprintf "(%s %s)" s
+        (String.concat " " (Array.to_list (Array.map print_expr es)))
 
 let print_proto = function
   | Prototype (fn, args) ->
-      Printf.sprintf "%s %s" fn (array_concat " " args)
+      Printf.sprintf "%s %s" fn (String.concat " " (Array.to_list args))
 
 let print = function
   | Expr e ->

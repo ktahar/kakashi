@@ -1,3 +1,4 @@
+type proto = Prototype of string * string array
 type stmt =
   | Expr of expr
   | Extern of proto
@@ -7,4 +8,3 @@ and expr =
   | Variable of string
   | Binary of char * expr * expr
   | Call of string * expr array
-and proto = Prototype of string * string array

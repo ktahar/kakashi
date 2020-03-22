@@ -81,22 +81,27 @@ let codegen_proto = function
         (params f) ;
       f
 
-let codegen_func = function
-  | Ast.Function (proto, body) -> (
-      Hashtbl.clear named_values ;
-      let the_function = codegen_proto proto in
-      (* Create a new basic block to start insertion into. *)
-      let bb = append_block context "entry" the_function in
-      position_at_end bb builder ;
-      try
-        let ret_val = codegen_expr body in
-        (* Finish off the function. *)
-        let _ = build_ret ret_val builder in
-        (* Validate the generated code, checking for consistency. *)
-        Llvm_analysis.assert_valid_function the_function ;
-        the_function
-      with e ->
-        delete_function the_function ;
-        raise e )
-  | _ ->
-      raise (Error "codegen_func is called for non-function")
+let codegen_func proto expr =
+  Hashtbl.clear named_values ;
+  let the_function = codegen_proto proto in
+  (* Create a new basic block to start insertion into. *)
+  let bb = append_block context "entry" the_function in
+  position_at_end bb builder ;
+  try
+    let ret_val = codegen_expr expr in
+    (* Finish off the function. *)
+    let _ = build_ret ret_val builder in
+    (* Validate the generated code, checking for consistency. *)
+    Llvm_analysis.assert_valid_function the_function ;
+    the_function
+  with e ->
+    delete_function the_function ;
+    raise e
+
+let codegen = function
+  | Ast.Function (proto, expr) ->
+      codegen_func proto expr
+  | Ast.Extern proto ->
+      codegen_proto proto
+  | Ast.Expr e ->
+      codegen_expr e
