@@ -1,0 +1,22 @@
+*~
+*.swp
+tags
+
+# C
+*.so
+compile_commands.json
+a.out
+
+# OCaml
+*.o
+*.cmo
+*.cmi
+*.cmx
+.merlin
+_build
+
+*.png
+*.jpg
+*.exe
+
+!/.editorconfig
