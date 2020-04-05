@@ -4,5 +4,5 @@
 (ocamllex lexer)
 
 (library
-  (name kakashi)
+  (name kakashi_lib)
   (libraries llvm llvm.analysis))

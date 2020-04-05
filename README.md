@@ -22,4 +22,4 @@ opam insall dune menhir llvm
 
 ## Run
 
-`_build/default/bin/repl.exe`
+`_build/default/bin/kakashi.exe`
